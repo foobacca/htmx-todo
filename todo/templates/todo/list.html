@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <title>Todo App - list</title>
+  </head>
+  <body>
+    <h1>ToDo App</h1>
+    <p><a href="{% url 'todo:index' %}">Home</a> | <a href="{% url 'todo:list' %}">List</a></p>
+    <h2>Todo List</h2>
+    <p>There are {{ todo_count }} items.</p>
+    <ul>
+      {% for todo_item in todo_list %}
+      <li><a href="{% url 'todo:detail' todo_item.id %}">{{ todo_item.id }}: {{ todo_item.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
+
