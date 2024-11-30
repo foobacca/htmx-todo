@@ -1,0 +1,11 @@
+[project]
+name = "htmx-todo"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django-htmx>=1.21.0",
+    "django>=5.1.3",
+    "pytest-django>=4.9.0",
+]
