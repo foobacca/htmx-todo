@@ -1,6 +1,7 @@
-from django.shortcuts import get_object_or_404
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
-from django.views.decorators.http import require_http_methods, require_safe
+from django.views.decorators.http import require_http_methods, require_POST, require_safe
 
 from .forms import TodoForm
 from .models import TodoItem
@@ -29,36 +30,42 @@ def todo_detail(request, todo_id: int):
 
 @require_http_methods(["GET", "HEAD", "POST"])
 def todo_create(request):
-    messages = []
     if request.method == "POST":
         form = TodoForm(request.POST)
         if form.is_valid():
             new_todo = form.save()
-            messages.append(f"Created new todo item: {new_todo.id}, {new_todo.title}")
-            # finally, reset the form for redisplay
-            form = TodoForm()
+            messages.add_message(
+                request, messages.INFO, f"Created new todo item: {new_todo.id}, {new_todo.title}"
+            )
+            return redirect("todo:list")
         # if form is not valid, leave it with errors for redisplay
     else:
         form = TodoForm()
-    pass
+    return TemplateResponse(request, "todo/new.html", {"form": form})
 
 
 @require_http_methods(["GET", "HEAD", "POST"])
 def todo_edit(request, todo_id: int):
-    messages = []
+    todo = get_object_or_404(TodoItem, id=todo_id)
     if request.method == "POST":
-        form = TodoForm(request.POST)
+        form = TodoForm(request.POST, instance=todo)
         if form.is_valid():
-            # TODO: update existing item
             new_todo = form.save()
-            messages.append(f"Created new todo item: {new_todo.id}, {new_todo.title}")
-            # finally, reset the form for redisplay
-            form = TodoForm()
+            messages.add_message(
+                request, messages.INFO, f"Updated todo item: {new_todo.id}, {new_todo.title}"
+            )
+            return redirect("todo:list")
         # if form is not valid, leave it with errors for redisplay
     else:
-        form = TodoForm()
-    pass
+        form = TodoForm(instance=todo)
+    return TemplateResponse(
+        request, "todo/edit.html", {"form": form, 'todo_id': todo.id}
+    )
 
 
-def todo_delete(request):
-    pass
+@require_POST
+def todo_delete(request, todo_id: int):
+    todo = get_object_or_404(TodoItem, id=todo_id)
+    todo.delete()
+    messages.add_message(request, messages.INFO, "Deleted todo item")
+    return redirect("todo:list")

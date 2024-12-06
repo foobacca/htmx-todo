@@ -1,12 +1,6 @@
 {% extends "todo/base.html" %}
 
 {% block content %}
-    <h2>New Todo</h2>
-    <form action="" method="POST">
-      {% csrf_token %}
-      {{ form }}
-      <input type="submit" name="save" value="Save">
-    </form>
     <h2>Search</h2>
     <form action="{% url 'todo:list' %}" method="GET" class="tool-bar">
       <label for="search">Search Term</label>
@@ -24,20 +18,24 @@
         <tr>
           <th>ID</th>
           <th>Title</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
       {% for todo_item in todo_list %}
         <tr>
+          <td> {{ todo_item.id }} </td>
+          <td> {{ todo_item.title }} </td>
           <td>
-            <a href="{% url 'todo:detail' todo_item.id %}">{{ todo_item.id }}</a>
-          </td>
-          <td>
-            <a href="{% url 'todo:detail' todo_item.id %}">{{ todo_item.title }}</a>
+            <a href="{% url 'todo:edit' todo_item.id %}">Edit</a> |
+            <a href="{% url 'todo:detail' todo_item.id %}">View</a>
           </td>
         </tr>
       {% endfor %}
       </tbody>
     </table>
+    <p>
+      <a href="{% url 'todo:new' %}">Add Todo</a>
+    </p>
 {% endblock content %}
 

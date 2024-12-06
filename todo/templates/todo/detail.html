@@ -4,5 +4,6 @@
     <h2>{{ todo.title }}</h1>
     <p>{{ todo.text }}</p>
     <p>ID: {{ todo.id }}</p>
+    <p><a href="{% url 'todo:edit' todo.id %}">Edit</a></p>
 {% endblock content %}
 

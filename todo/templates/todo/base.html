@@ -7,6 +7,15 @@
     <!-- script src="https://cdn.tailwindcss.com"></script -->
   </head>
   <body>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
     <h1>ToDo App</h1>
     <p><a href="{% url 'todo:list' %}">List</a></p>
     {% block content %} {% endblock content %}
