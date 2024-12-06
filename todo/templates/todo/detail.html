@@ -1,13 +1,8 @@
-<html>
-  <head>
-    <title>Todo App - detail</title>
-  </head>
-  <body>
-    <h1>ToDo App</h1>
-    <p><a href="{% url 'todo:index' %}">Home</a> | <a href="{% url 'todo:list' %}">List</a></p>
+{% extends "todo/base.html" %}
+
+{% block content %}
     <h2>{{ todo.title }}</h1>
     <p>{{ todo.text }}</p>
     <p>ID: {{ todo.id }}</p>
-  </body>
-</html>
+{% endblock content %}
 

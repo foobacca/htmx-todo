@@ -1,23 +1,43 @@
-<html>
-  <head>
-    <title>Todo App - list</title>
-  </head>
-  <body>
-    <h1>ToDo App</h1>
-    <p><a href="{% url 'todo:index' %}">Home</a> | <a href="{% url 'todo:list' %}">List</a></p>
+{% extends "todo/base.html" %}
+
+{% block content %}
     <h2>New Todo</h2>
     <form action="" method="POST">
       {% csrf_token %}
       {{ form }}
       <input type="submit" name="save" value="Save">
     </form>
+    <h2>Search</h2>
+    <form action="{% url 'todo:list' %}" method="GET" class="tool-bar">
+      <label for="search">Search Term</label>
+      <input id="search" type="search" name="q" value="{{ search_term }}" />
+      <input type="submit" value="Search">
+    </form>
     <h2>Todo List</h2>
+    {% if search_term %}
+    <p>There are {{ todo_count }} items that match "{{ search_term }}".</p>
+    {% else %}
     <p>There are {{ todo_count }} items.</p>
-    <ul>
+    {% endif %}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
       {% for todo_item in todo_list %}
-      <li><a href="{% url 'todo:detail' todo_item.id %}">{{ todo_item.id }}: {{ todo_item.title }}</a></li>
+        <tr>
+          <td>
+            <a href="{% url 'todo:detail' todo_item.id %}">{{ todo_item.id }}</a>
+          </td>
+          <td>
+            <a href="{% url 'todo:detail' todo_item.id %}">{{ todo_item.title }}</a>
+          </td>
+        </tr>
       {% endfor %}
-    </ul>
-  </body>
-</html>
+      </tbody>
+    </table>
+{% endblock content %}
 
