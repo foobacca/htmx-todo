@@ -1,10 +1,11 @@
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, resolve_url
 from django.template.response import TemplateResponse
-from django.views.decorators.http import require_http_methods, require_POST, require_safe
+from django.views.decorators.http import require_http_methods, require_safe
 
 from .forms import TodoForm
 from .models import TodoItem
+from .response import HttpResponseSeeOther
 
 
 @require_safe
@@ -22,9 +23,14 @@ def todo_list(request):
     return TemplateResponse(request, "todo/list.html", context)
 
 
-@require_safe
+@require_http_methods(["GET", "HEAD", "DELETE"])
 def todo_detail(request, todo_id: int):
     todo = get_object_or_404(TodoItem, id=todo_id)
+    if request.method == "DELETE":
+        todo.delete()
+        messages.add_message(request, messages.INFO, "Deleted todo item")
+        return HttpResponseSeeOther(resolve_url("todo:list"))
+    # this is GET or HEAD
     return TemplateResponse(request, "todo/detail.html", {"todo": todo})
 
 
@@ -61,11 +67,3 @@ def todo_edit(request, todo_id: int):
     return TemplateResponse(
         request, "todo/edit.html", {"form": form, 'todo_id': todo.id}
     )
-
-
-@require_POST
-def todo_delete(request, todo_id: int):
-    todo = get_object_or_404(TodoItem, id=todo_id)
-    todo.delete()
-    messages.add_message(request, messages.INFO, "Deleted todo item")
-    return redirect("todo:list")

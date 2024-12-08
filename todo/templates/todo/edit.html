@@ -8,10 +8,13 @@
     <input type="submit" name="save" value="Save">
   </form>
 
-  <form action="{% url 'todo:delete' todo_id %}" method="POST">
-    {% csrf_token %}
-    <button>Delete Todo</button>
-  </form>
+  <button hx-delete="{% url 'todo:detail' todo_id %}"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-target="body"
+          hx-push-url="true"
+          hx-confirm="Are you sure you want to delete this todo?">
+    Delete Todo
+  </button>
 
   <p>
     <a href="{% url 'todo:list' %}">Back</a>
