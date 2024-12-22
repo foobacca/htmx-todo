@@ -4,7 +4,17 @@
   <h2>Edit Todo</h2>
   <form action="{% url 'todo:edit' todo_id %}" method="POST">
     {% csrf_token %}
-    {{ form }}
+    {{ form.non_field_errors }}
+    <div class ="fieldWrapper">
+      {{ form.title.errors }}
+      <label for="{{ form.title.id_for_label }}">Title:</label>
+      {{ form.title }}
+    </div>
+    <div class ="fieldWrapper">
+      {{ form.text.errors }}
+      <label for="{{ form.text.id_for_label }}">Text:</label>
+      {{ form.text }}
+    </div>
     <input type="submit" name="save" value="Save">
   </form>
 
