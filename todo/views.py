@@ -73,7 +73,7 @@ def todo_edit(request, todo_id: int):
 @require_safe
 def title_check(request, todo_id: int):
     todo = get_object_or_404(TodoItem, id=todo_id)
-    todo.title = request.GET.get("id_title")
+    todo.title = request.GET.get("title")
     try:
         todo.full_clean()
         return HttpResponse()
@@ -86,8 +86,8 @@ def title_check(request, todo_id: int):
 
 @require_safe
 def title_check_new(request):
-    todo = TodoItem.objects.create()
-    todo.title = request.GET.get("id_title")
+    todo = TodoItem()
+    todo.title = request.GET.get("title")
     try:
         todo.full_clean()
         return HttpResponse()

@@ -8,17 +8,18 @@
     <div class ="fieldWrapper">
       {{ form.title.errors }}
       <span class="error"></span>
-      <label for="{{ form.title.id_for_label }}">Title:</label>
+      <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
       <input
         type="text"
         id="{{ form.title.id_for_label }}"
-        name="{{ form.title.id_for_label }}"
+        name="{{ form.title.name }}"
         value=""
         placeholder="Title"
         maxlength="200"
         required=""
         hx-get="{% url 'todo:title_check_new' %}"
         hx-target="previous .error"
+        hx-trigger="change, keyup delay:200ms changed"
       >
     </div>
     <div class ="fieldWrapper">
