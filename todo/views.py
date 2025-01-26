@@ -19,12 +19,17 @@ def todo_list(request):
         todo_qs = TodoItem.objects.all()
     paginator = Paginator(todo_qs, 10)
 
+    if request.headers.get("HX-Trigger") == "search":
+        template = "todo/todo_rows.html"
+    else:
+        template = "todo/list.html"
+
     context = {
         "todo_count": todo_qs.count(),
         "todo_list": paginator.get_page(page_number),
         "search_term": search,
     }
-    return TemplateResponse(request, "todo/list.html", context)
+    return TemplateResponse(request, template, context)
 
 
 @require_http_methods(["GET", "HEAD", "DELETE"])

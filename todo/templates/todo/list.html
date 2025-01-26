@@ -4,7 +4,15 @@
     <h2>Search</h2>
     <form action="{% url 'todo:list' %}" method="GET" class="tool-bar">
       <label for="search">Search Term</label>
-      <input id="search" type="search" name="q" value="{{ search_term }}" />
+      <input
+        id="search"
+        type="search"
+        name="q"
+        value="{{ search_term }}"
+        hx-get="{% url 'todo:list' %}"
+        hx-trigger="search, keyup delay:200ms changed"
+        hx-target="tbody"
+      />
       <input type="submit" value="Search">
     </form>
     <h2>Todo List</h2>
@@ -25,16 +33,7 @@
         </tr>
       </thead>
       <tbody>
-      {% for todo_item in todo_list %}
-        <tr>
-          <td> {{ todo_item.id }} </td>
-          <td> {{ todo_item.title }} </td>
-          <td>
-            <a href="{% url 'todo:edit' todo_item.id %}">Edit</a> |
-            <a href="{% url 'todo:detail' todo_item.id %}">View</a>
-          </td>
-        </tr>
-      {% endfor %}
+      {% include "todo/todo_rows.html" %}
       {% if todo_list.has_next %}
       <tr>
         <td colspan="4" style="text-align: center">
