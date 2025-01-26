@@ -7,8 +7,19 @@
     {{ form.non_field_errors }}
     <div class ="fieldWrapper">
       {{ form.title.errors }}
+      <span class="error"></span>
       <label for="{{ form.title.id_for_label }}">Title:</label>
-      {{ form.title }}
+      <input
+        type="text"
+        id="{{ form.title.id_for_label }}"
+        name="{{ form.title.id_for_label }}"
+        value=""
+        placeholder="Title"
+        maxlength="200"
+        required=""
+        hx-get="{% url 'todo:title_check_new' %}"
+        hx-target="previous .error"
+      >
     </div>
     <div class ="fieldWrapper">
       {{ form.text.errors }}

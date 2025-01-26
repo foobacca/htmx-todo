@@ -1,6 +1,7 @@
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, resolve_url
-from django.template.response import TemplateResponse
+from django.template.response import HttpResponse, TemplateResponse
 from django.views.decorators.http import require_http_methods, require_safe
 
 from .forms import TodoForm
@@ -67,3 +68,31 @@ def todo_edit(request, todo_id: int):
     return TemplateResponse(
         request, "todo/edit.html", {"form": form, 'todo_id': todo.id}
     )
+
+
+@require_safe
+def title_check(request, todo_id: int):
+    todo = get_object_or_404(TodoItem, id=todo_id)
+    todo.title = request.GET.get("id_title")
+    try:
+        todo.full_clean()
+        return HttpResponse()
+    except ValidationError as error:
+        title_errors = error.message_dict.get("title", [])
+        if not title_errors:
+            return HttpResponse()
+        return HttpResponse(",".join(title_errors))
+
+
+@require_safe
+def title_check_new(request):
+    todo = TodoItem.objects.create()
+    todo.title = request.GET.get("id_title")
+    try:
+        todo.full_clean()
+        return HttpResponse()
+    except ValidationError as error:
+        title_errors = error.message_dict.get("title", [])
+        if not title_errors:
+            return HttpResponse()
+        return HttpResponse(",".join(title_errors))
