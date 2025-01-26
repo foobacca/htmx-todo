@@ -13,6 +13,9 @@
     {% else %}
     <p>There are {{ todo_count }} items.</p>
     {% endif %}
+    <p>
+      <a href="{% url 'todo:new' %}">Add Todo</a>
+    </p>
     <table>
       <thead>
         <tr>
@@ -35,21 +38,19 @@
       {% if todo_list.has_next %}
       <tr>
         <td colspan="4" style="text-align: center">
-          <button
+          <span
               hx-target="closest tr"
+              hx-trigger="revealed"
               hx-swap="outerHTML"
               hx-select="tbody > tr"
               hx-get="?page={{ todo_list.next_page_number }}"
           >
           Load More
-          </button>
+          </span>
         </td>
       </tr>
       {% endif %}
       </tbody>
     </table>
-    <p>
-      <a href="{% url 'todo:new' %}">Add Todo</a>
-    </p>
 {% endblock content %}
 
