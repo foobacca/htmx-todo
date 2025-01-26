@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, resolve_url
 from django.template.response import HttpResponse, TemplateResponse
 from django.views.decorators.http import require_http_methods, require_safe
@@ -11,14 +12,16 @@ from .response import HttpResponseSeeOther
 
 @require_safe
 def todo_list(request):
+    page_number = request.GET.get("page", 1)
     if search := request.GET.get("q", ""):
         todo_qs = TodoItem.objects.contains_text(search)
     else:
         todo_qs = TodoItem.objects.all()
+    paginator = Paginator(todo_qs, 10)
 
     context = {
         "todo_count": todo_qs.count(),
-        "todo_list": todo_qs,
+        "todo_list": paginator.get_page(page_number),
         "search_term": search,
     }
     return TemplateResponse(request, "todo/list.html", context)

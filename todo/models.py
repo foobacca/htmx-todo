@@ -9,3 +9,6 @@ class TodoItem(models.Model):
     text = models.TextField()
 
     objects = TodoQuerySet.as_manager()
+
+    class Meta:
+        ordering = ["id"]
