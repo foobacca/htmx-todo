@@ -25,11 +25,7 @@
       <input type="submit" value="Search">
     </form>
     <h2>Todo List</h2>
-    {% if search_term %}
-    <p>There are {{ todo_count }} items that match "{{ search_term }}".</p>
-    {% else %}
-    <p>There are {{ todo_count }} items.</p>
-    {% endif %}
+    <p> <span hx-get="{% url 'todo:count' %}" hx-trigger="load">...</span> </p>
     <p>
       <a href="{% url 'todo:new' %}">Add Todo</a>
     </p>

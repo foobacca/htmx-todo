@@ -25,11 +25,16 @@ def todo_list(request):
         template = "todo/list.html"
 
     context = {
-        "todo_count": todo_qs.count(),
         "todo_list": paginator.get_page(page_number),
         "search_term": search,
     }
     return TemplateResponse(request, template, context)
+
+
+@require_safe
+def todo_count(request):
+    todo_count = TodoItem.objects.slow_count()
+    return HttpResponse(f"There are { todo_count } items.")
 
 
 @require_http_methods(["GET", "HEAD", "DELETE"])
