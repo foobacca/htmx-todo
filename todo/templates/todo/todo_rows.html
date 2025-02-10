@@ -8,7 +8,8 @@
             <a href="#" 
                hx-delete="{% url 'todo:detail' todo_item.id %}"
                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-               hx-target="body"
+               hx-swap="outerHTML"
+               hx-target="closest tr"
                hx-confirm="Are you sure you want to delete this todo?">Delete</a>
           </td>
         </tr>

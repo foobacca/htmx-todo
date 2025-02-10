@@ -42,8 +42,10 @@ def todo_detail(request, todo_id: int):
     todo = get_object_or_404(TodoItem, id=todo_id)
     if request.method == "DELETE":
         todo.delete()
-        messages.add_message(request, messages.INFO, "Deleted todo item")
-        return HttpResponseSeeOther(resolve_url("todo:list"))
+        if request.headers.get("HX-Trigger") == "delete-btn":
+            messages.add_message(request, messages.INFO, "Deleted todo item")
+            return HttpResponseSeeOther(resolve_url("todo:list"))
+        return HttpResponse("")
     # this is GET or HEAD
     return TemplateResponse(request, "todo/detail.html", {"todo": todo})
 
