@@ -25,7 +25,6 @@
       <input type="submit" value="Search">
     </form>
     <h2>Todo List</h2>
-    <p> <span hx-get="{% url 'todo:count' %}" hx-trigger="load">...</span> </p>
     <p>
       <a href="{% url 'todo:new' %}">Add Todo</a>
     </p>
@@ -56,5 +55,8 @@
       {% endif %}
       </tbody>
     </table>
+    <p> <span hx-get="{% url 'todo:count' %}" hx-trigger="revealed">
+      <img id="spinner" class="htmx-indicator" src="{% static 'img/spinning-circles.svg' %}" />
+    </span> </p>
 {% endblock content %}
 
