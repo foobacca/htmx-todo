@@ -7,6 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="{% static 'js/htmx-2.0.3.min.js' %}" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"></script>
     <!-- script src="https://cdn.tailwindcss.com"></script -->
+    <style>
+      tr.htmx-swapping {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+      }
+    </style>
   </head>
   <body hx-boost="true">
 
