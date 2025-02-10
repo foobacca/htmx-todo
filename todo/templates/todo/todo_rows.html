@@ -4,7 +4,12 @@
           <td> {{ todo_item.title }} </td>
           <td>
             <a href="{% url 'todo:edit' todo_item.id %}">Edit</a> |
-            <a href="{% url 'todo:detail' todo_item.id %}">View</a>
+            <a href="{% url 'todo:detail' todo_item.id %}">View</a> |
+            <a href="#" 
+               hx-delete="{% url 'todo:detail' todo_item.id %}"
+               hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+               hx-target="body"
+               hx-confirm="Are you sure you want to delete this todo?">Delete</a>
           </td>
         </tr>
       {% endfor %}
