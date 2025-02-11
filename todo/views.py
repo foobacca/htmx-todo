@@ -93,11 +93,13 @@ def todo_edit(request, todo_id: int):
     )
 
 
-@require_http_methods(["GET", "HEAD", "POST"])
+@require_http_methods(["GET", "HEAD", "POST", "DELETE"])
 def todo_archive(request):
     archiver = Archiver.get()
     if request.method == "POST":
         archiver.run()
+    elif request.method == "DELETE":
+        archiver.reset()
     return TemplateResponse(request, "todo/archive_ui.html", {"archiver": archiver})
 
 

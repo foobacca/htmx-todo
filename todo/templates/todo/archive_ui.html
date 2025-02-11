@@ -24,6 +24,7 @@
   <a hx-boost="false" href="{% url 'todo:archive_file' %}">
       Archive Ready! Click here to download. &downarrow;
     </a>
+    <button hx-delete="{% url 'todo:archive' %}">Clear Download</button>
   {% else %}
     Unknown!
   {% endif %}
