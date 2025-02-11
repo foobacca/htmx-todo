@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, resolve_url
 from django.template.response import HttpResponse, TemplateResponse
 from django.views.decorators.http import require_http_methods, require_safe
 
+from .archive import Archiver
 from .forms import TodoForm
 from .models import TodoItem
 from .response import HttpResponseSeeOther
@@ -29,9 +30,11 @@ def todo_list(request):
     else:
         template = "todo/list.html"
 
+    archiver = Archiver.get()
     context = {
         "todo_list": paginator.get_page(page_number),
         "search_term": search,
+        "archiver": archiver,
     }
     return TemplateResponse(request, template, context)
 
@@ -50,7 +53,7 @@ def todo_detail(request, todo_id: int):
         if request.DELETE.get("HX-Trigger") == "delete-btn":
             messages.add_message(request, messages.INFO, "Deleted todo item")
             return HttpResponseSeeOther(resolve_url("todo:list"))
-        return HttpResponse("")
+        return HttpResponse()
     # this is GET or HEAD
     return TemplateResponse(request, "todo/detail.html", {"todo": todo})
 
@@ -88,6 +91,20 @@ def todo_edit(request, todo_id: int):
     return TemplateResponse(
         request, "todo/edit.html", {"form": form, 'todo_id': todo.id}
     )
+
+
+@require_http_methods(["GET", "HEAD", "POST"])
+def todo_archive(request):
+    archiver = Archiver.get()
+    if request.method == "POST":
+        archiver.run()
+    return TemplateResponse(request, "todo/archive_ui.html", {"archiver": archiver})
+
+
+@require_safe
+def todo_archive_file(request):
+    # TODO: implement me
+    return HttpResponse()
 
 
 @require_safe

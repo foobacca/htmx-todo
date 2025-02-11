@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+    {% include "todo/archive_ui.html" %}
     <h2>Search</h2>
     <form action="{% url 'todo:list' %}" method="GET" class="tool-bar">
       <label for="search">Search Term</label>
