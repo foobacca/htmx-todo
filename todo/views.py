@@ -10,8 +10,13 @@ from .models import TodoItem
 from .response import HttpResponseSeeOther
 
 
-@require_safe
+@require_http_methods(["GET", "HEAD", "DELETE"])
 def todo_list(request):
+    if request.method == "DELETE":
+        todo_ids = [int(id) for id in request.GET.getlist("selected_todo_ids")]
+        TodoItem.objects.filter(id__in=todo_ids).delete()
+        messages.add_message(request, messages.INFO, "deleted todos!")
+
     page_number = request.GET.get("page", 1)
     if search := request.GET.get("q", ""):
         todo_qs = TodoItem.objects.contains_text(search)
@@ -42,7 +47,7 @@ def todo_detail(request, todo_id: int):
     todo = get_object_or_404(TodoItem, id=todo_id)
     if request.method == "DELETE":
         todo.delete()
-        if request.headers.get("HX-Trigger") == "delete-btn":
+        if request.DELETE.get("HX-Trigger") == "delete-btn":
             messages.add_message(request, messages.INFO, "Deleted todo item")
             return HttpResponseSeeOther(resolve_url("todo:list"))
         return HttpResponse("")

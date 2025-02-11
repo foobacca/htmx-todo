@@ -28,6 +28,7 @@
     <p>
       <a href="{% url 'todo:new' %}">Add Todo</a>
     </p>
+    <form>
     <table>
       <thead>
         <tr>
@@ -55,6 +56,15 @@
       {% endif %}
       </tbody>
     </table>
+    <button
+      hx-delete="{% url 'todo:list' %}"
+      hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+      hx-confirm="Are you sure you want to delete these contacts?"
+      hx-target="body"
+      >
+      Delete Selected Todos
+    </button>
+    </form>
     <p> <span hx-get="{% url 'todo:count' %}" hx-trigger="revealed">
       <img id="spinner" class="htmx-indicator" src="{% static 'img/spinning-circles.svg' %}" />
     </span> </p>
