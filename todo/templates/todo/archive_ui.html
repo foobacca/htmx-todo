@@ -11,7 +11,8 @@
   <div hx-get="{% url 'todo:archive' %}" hx-trigger="load delay:500ms">
     Creating Archive ..
     <div class="progress">
-      <div class="progress-bar"
+      <div id="archive-progress"
+           class="progress-bar"
            role="progressbar"
            aria-valuenow="{{ archiver.progress_percent }}"
            style="width:{{ archiver.progress_percent }}%;"
